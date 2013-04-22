@@ -5,6 +5,8 @@
 // <author>John Gietzen</author>
 //-----------------------------------------------------------------------
 
+using WebGitNet.Authorization;
+
 namespace WebGitNet
 {
     using System.Linq;
@@ -23,6 +25,7 @@ namespace WebGitNet
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new CustomAuthorization());
         }
 
         public static void RegisterRoutes(RouteCollection routes)
