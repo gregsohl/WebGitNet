@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authorization\IAuthorizationProvider.cs" />
     <Compile Include="BreadCrumbTrail.cs" />
     <Compile Include="ConvertGlobFailedException.cs" />
     <Compile Include="DiffInfo.cs" />

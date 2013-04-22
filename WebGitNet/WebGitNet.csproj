@@ -87,6 +87,7 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\ServiceRpcController.cs" />
     <Compile Include="Controllers\SyndicationController.cs" />
+    <Compile Include="Authorization\CustomAuthorization.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -151,6 +152,7 @@
     <Content Include="Scripts\jquery.timeago.min.js" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\json2.min.js" />
+    <None Include="gitolite.conf" />
     <None Include="packages.config" />
     <Content Include="Scripts\prettify\lang-apollo.js" />
     <Content Include="Scripts\prettify\lang-clj.js" />

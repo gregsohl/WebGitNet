@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGitNet.RepoImpact", "Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGitNet.SearchProviders", "WebGitNet.SearchProviders\WebGitNet.SearchProviders.csproj", "{527FE49D-8F2F-4739-AEA4-137706EFFC3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGitNet.AuthorizationProviders", "WebGitNet.AuthorizationProviders\WebGitNet.AuthorizationProviders.csproj", "{21DA07F7-985D-4E5D-88C7-6C7ABD281AC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{527FE49D-8F2F-4739-AEA4-137706EFFC3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{527FE49D-8F2F-4739-AEA4-137706EFFC3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{527FE49D-8F2F-4739-AEA4-137706EFFC3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21DA07F7-985D-4E5D-88C7-6C7ABD281AC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21DA07F7-985D-4E5D-88C7-6C7ABD281AC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21DA07F7-985D-4E5D-88C7-6C7ABD281AC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21DA07F7-985D-4E5D-88C7-6C7ABD281AC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

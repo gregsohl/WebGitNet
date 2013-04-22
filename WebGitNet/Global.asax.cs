@@ -5,6 +5,11 @@
 // <author>John Gietzen</author>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Web.Configuration;
+
+using Castle.MicroKernel;
+
 using WebGitNet.Authorization;
 
 namespace WebGitNet
@@ -81,6 +86,8 @@ namespace WebGitNet
         {
             public void Install(IWindsorContainer container, IConfigurationStore configurationStore)
             {
+                var directoryFilter = new AssemblyFilter(HostingEnvironment.MapPath("~/Plugins"));
+                
                 container.Register(Component.For<IWindsorContainer>().Instance(container));
 
                 container.Register(AllTypes.FromThisAssembly()
@@ -94,7 +101,32 @@ namespace WebGitNet
                                            .BasedOn<IController>()
                                            .Configure(c => c.Named(c.Implementation.Name))
                                            .LifestyleTransient());
+                container.Register(AllTypes.FromAssemblyInDirectory(directoryFilter)
+                                           .BasedOn<IAuthorizationProvider>()
+                                           .If(SelectAuthorizationProvider)
+                                           .WithService.FromInterface()
+                                           .LifestyleSingleton());
             }
+
+            private bool SelectAuthorizationProvider(Type type)
+            {
+                string authorizationProviderName = WebConfigurationManager.AppSettings["AuthorizationProvider"];
+                authorizationProviderName = string.Format("{0}{1}", authorizationProviderName, "AuthorizationProvider");
+
+                if (type.Name == authorizationProviderName)
+                    return true;
+
+                return false;
+            }
+        }
+
+        public static IAuthorizationProvider GetAuthorizationProvider()
+        {
+            IAuthorizationProvider provider = container.Resolve<IAuthorizationProvider>();
+
+            provider.ApplicationPath = HostingEnvironment.ApplicationPhysicalPath;
+
+            return provider;
         }
     }
 }

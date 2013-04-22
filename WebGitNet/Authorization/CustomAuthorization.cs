@@ -1,5 +1,4 @@
-﻿
-namespace WebGitNet.Authorization
+﻿namespace WebGitNet.Authorization
 {
     using System;
     using System.Security.Principal;
@@ -48,7 +47,9 @@ namespace WebGitNet.Authorization
 
 		private bool VerifyUserPermissions(RepoInfo repoInfo, WindowsIdentity principal)
 		{
-		    return true;
+            IAuthorizationProvider authorizationProvider = WebGitNetApplication.GetAuthorizationProvider();
+
+		    return authorizationProvider.HasReadPermission(repoInfo.Name, principal.Name);
 		}
 
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
