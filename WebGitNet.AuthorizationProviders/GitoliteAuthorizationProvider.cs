@@ -49,7 +49,9 @@ namespace WebGitNet.AuthorizationProviders
             if (!enabled)
                 return false;
 
-            return permissionsConfig.ValidateAccess(repositoryName, userName, AccessType.Write);
+            bool hasWritePermission = permissionsConfig.ValidateAccess(repositoryName, userName, AccessType.Write);
+
+            return hasWritePermission;
         }
 
         private string applicationPath;

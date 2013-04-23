@@ -23,8 +23,6 @@ namespace WebGitNet.Authorization
 				return base.AuthorizeCore(httpContext);
 			}
 
-            // httpContext.User.Identity as WindowsIdentity
-
 			// Get the repository name from the URL
 			var reposPath = WebConfigurationManager.AppSettings["RepositoriesPath"];
 			FileManager fileManager = new FileManager(reposPath);
@@ -41,6 +39,11 @@ namespace WebGitNet.Authorization
 				{
 					return false;
 				}
+
+                if (httpContext.Request.Url.AbsolutePath.Contains("git-upload-pack"))
+                {
+                    return VerifyUserReadPermission(repoInfo, windowsIdentity);
+                }
 
 				return VerifyUserReadPermission(repoInfo, windowsIdentity);
 			}
@@ -75,6 +78,26 @@ namespace WebGitNet.Authorization
                 repoInfo.HasReadPermission = hasReadPermission;
             }
         }
+
+        public static bool VerifyUserWritePermission(RepoInfo repoInfo, WindowsIdentity principal)
+        {
+            string repositoryName = repoInfo.Name;
+            string userName = principal.Name;
+
+            bool verifyUserReadPermission = VerifyUserWritePermission(repositoryName, userName);
+
+            return verifyUserReadPermission;
+        }
+
+        private static bool VerifyUserWritePermission(string repoName, string userName)
+        {
+            IAuthorizationProvider authorizationProvider = WebGitNetApplication.GetAuthorizationProvider();
+
+            bool verifyUserPermissions = authorizationProvider.HasWritePermission(repoName, userName);
+
+            return verifyUserPermissions;
+        }
+
 
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
 		{
