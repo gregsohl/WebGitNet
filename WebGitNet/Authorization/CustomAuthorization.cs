@@ -1,4 +1,5 @@
-﻿using System.Web.Routing;
+﻿using System.Collections.Generic;
+using System.Web.Routing;
 
 namespace WebGitNet.Authorization
 {
@@ -41,31 +42,42 @@ namespace WebGitNet.Authorization
 					return false;
 				}
 
-				return VerifyUserPermissions(repoInfo, windowsIdentity);
+				return VerifyUserReadPermission(repoInfo, windowsIdentity);
 			}
 
 			return base.AuthorizeCore(httpContext);
 		}
 
-		private bool VerifyUserPermissions(RepoInfo repoInfo, WindowsIdentity principal)
+	    public static bool VerifyUserReadPermission(RepoInfo repoInfo, WindowsIdentity principal)
 		{
-            IAuthorizationProvider authorizationProvider = WebGitNetApplication.GetAuthorizationProvider();
+            string repositoryName = repoInfo.Name;
+            string userName = principal.Name;
 
-		    bool verifyUserPermissions = authorizationProvider.HasReadPermission(repoInfo.Name, principal.Name);
+	        bool verifyUserReadPermission = VerifyUserReadPermission(repositoryName, userName);
 
-		    return verifyUserPermissions;
+	        return verifyUserReadPermission;
 		}
+
+	    private static bool VerifyUserReadPermission(string repositoryName, string userName)
+	    {
+	        IAuthorizationProvider authorizationProvider = WebGitNetApplication.GetAuthorizationProvider();
+
+	        bool verifyUserPermissions = authorizationProvider.HasReadPermission(repositoryName, userName);
+
+	        return verifyUserPermissions;
+	    }
+
+	    public static void VerifyUserReadPermission(List<RepoInfo> repoList, string userName)
+        {
+            foreach (var repoInfo in repoList)
+            {
+                bool hasReadPermission = VerifyUserReadPermission(repoInfo.Name, userName);
+                repoInfo.HasReadPermission = hasReadPermission;
+            }
+        }
 
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
 		{
-            // Returns HTTP 401 - see comment in HttpUnauthorizedResult.cs.
-            //filterContext.Result = new RedirectToRouteResult(
-            //                           new RouteValueDictionary 
-            //                       {
-            //                           { "action", "Index" },
-            //                           { "controller", "BrowseController" }
-            //                       });
-
 			base.HandleUnauthorizedRequest(filterContext);
 		}
 	}

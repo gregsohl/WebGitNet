@@ -5,6 +5,12 @@
 // <author>John Gietzen</author>
 //-----------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Security.Principal;
+using System.Web.Configuration;
+
+using WebGitNet.Authorization;
+
 namespace WebGitNet.Controllers
 {
     using System.IO;
@@ -17,20 +23,47 @@ namespace WebGitNet.Controllers
 
     public class BrowseController : SharedControllerBase
     {
+        private string BrowseListSetting;
+
         public BrowseController()
         {
-            this.BreadCrumbs.Append("Browse", "Index", "Browse");
+            BreadCrumbs.Append("Browse", "Index", "Browse");
+            BrowseListSetting = WebConfigurationManager.AppSettings["BrowseList"];
         }
 
         public ActionResult Index(bool archived = false)
         {
-            var directory = this.FileManager.DirectoryInfo;
+            var directory = FileManager.DirectoryInfo;
 
             ViewBag.Archived = archived;
             var repos = (from dir in directory.EnumerateDirectories()
-                         select GitUtilities.GetRepoInfo(dir.FullName)).Where(ri => ri.IsArchived == archived).ToList();
+                         select GitUtilities
+                         .GetRepoInfo(dir.FullName))
+                         .Where(ri => ri.IsArchived == archived)
+                         .Where(IncludeRepoOnList)
+                         .ToList();
+
+            if (BrowseListSetting == "AllLinkWithPermission")
+            {
+                WindowsIdentity windowsIdentity = HttpContext.User.Identity as WindowsIdentity;
+                CustomAuthorization.VerifyUserReadPermission(repos, windowsIdentity.Name);
+            }
 
             return View(repos);
+        }
+
+        private bool IncludeRepoOnList(RepoInfo ri)
+        {
+            WindowsIdentity windowsIdentity = HttpContext.User.Identity as WindowsIdentity;
+
+            if (!string.IsNullOrWhiteSpace(BrowseListSetting) &&
+                (BrowseListSetting == "OnlyWithPermission"))
+            {
+                bool hasReadPermission = CustomAuthorization.VerifyUserReadPermission(ri, windowsIdentity);
+                return hasReadPermission;
+            }
+
+            return true;
         }
 
         public ActionResult ViewRepo(string repo)
