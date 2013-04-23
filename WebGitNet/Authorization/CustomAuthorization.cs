@@ -58,16 +58,16 @@ namespace WebGitNet.Authorization
 	        return verifyUserReadPermission;
 		}
 
-	    private static bool VerifyUserReadPermission(string repositoryName, string userName)
+	    private static bool VerifyUserReadPermission(string repoName, string userName)
 	    {
 	        IAuthorizationProvider authorizationProvider = WebGitNetApplication.GetAuthorizationProvider();
 
-	        bool verifyUserPermissions = authorizationProvider.HasReadPermission(repositoryName, userName);
+	        bool verifyUserPermissions = authorizationProvider.HasReadPermission(repoName, userName);
 
 	        return verifyUserPermissions;
 	    }
 
-	    public static void VerifyUserReadPermission(List<RepoInfo> repoList, string userName)
+	    public static void SetRepoListReadPermissions(List<RepoInfo> repoList, string userName)
         {
             foreach (var repoInfo in repoList)
             {

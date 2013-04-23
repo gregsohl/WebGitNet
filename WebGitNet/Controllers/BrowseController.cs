@@ -46,7 +46,7 @@ namespace WebGitNet.Controllers
             if (BrowseListSetting == "AllLinkWithPermission")
             {
                 WindowsIdentity windowsIdentity = HttpContext.User.Identity as WindowsIdentity;
-                CustomAuthorization.VerifyUserReadPermission(repos, windowsIdentity.Name);
+                CustomAuthorization.SetRepoListReadPermissions(repos, windowsIdentity.Name);
             }
 
             return View(repos);
