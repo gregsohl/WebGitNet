@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8D23B6C3-A2D4-4D39-8AFA-7DA2A65B95AB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GitoliteConfigTest</RootNamespace>
+    <AssemblyName>GitoliteConfigTest</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GitoliteConfigTestCreate.cs" />
+    <Compile Include="GitoliteConfigTestDeny.cs" />
+    <Compile Include="GitoliteConfigTestGroups.cs" />
+    <Compile Include="GitoliteConfigTestLoad.cs" />
+    <Compile Include="GitoliteConfigTestPermissions.cs" />
+    <Compile Include="GitoliteConfigTestPermissionsForAll.cs" />
+    <Compile Include="GitoliteConfigTestPermissionsForGroups.cs" />
+    <Compile Include="GitoliteConfigTestRepositories.cs" />
+    <Compile Include="GitoliteConfigTestBase.cs" />
+    <Compile Include="GitoliteConfigTestSyntaxErrors.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GitoliteConfigFiles\Permissions %28Deny%29\Deny3.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions %28Deny%29\DenyOptionSetting.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions %28Deny%29\Deny2.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Groups\GroupWithDomainUsers.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions %28%40all%29\AllCumulative1.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions %28Groups%29\MixGroupAndIndividualAcrossProjects.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions %28Groups%29\ReadWritePermissionMixedForGroups.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions %28Groups%29\ReadPermissionForGroup.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions\MergeRefPermissionMixedForMultipleUsers.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions\DeleteRefPermissionMixedForMultipleUsers.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions\CreateRefPermissionMixedForMultipleUsers.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions\ReadWritePermissionForMultipleUsers.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions\ReadPermissionForMultipleUsers.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions\ReadWritePermissionsMixedForSpecificUsers.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions %28%40all%29\ReadWritePermissionsForAllForAllRepos.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions %28%40all%29\ReadPermissionsForAllForAllRepos.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions %28%40all%29\ReadWritePermissionsForAllForSpecificRepo.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions\ReadPermissionsForAllForSpecificRepo.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions\ReadWritePermissionForIndividual.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions\WritePermissionForIndividual.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Permissions\ReadPermissionForIndividual.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Repositories\MultipleReposNoPermissions.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Repositories\RepoFromMixedSingleAndRepoGroup.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Repositories\RepoFromNestedRepoGroups.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Repositories\RepoFromMultipleRepoGroups.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Repositories\RepoFromRepoGroup.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Repositories\RepoAllNoPermissions.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Repositories\SimpleRepoNoPermissions.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Groups\NestedGroupsInlineExpansion.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Groups\NestedGroups.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Groups\OneGroupAccumulated.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Groups\TwoGroups.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Groups\SimpleGroups.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\Load\OnlyComments.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\SyntaxErrors\ErrorBadOption.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="GitoliteConfigFiles\SyntaxErrors\ErrorBadPermission.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GitoliteConfig\GitoliteConfig.csproj">
+      <Project>{0053e53f-2e6a-4fa0-9921-2dc05714f239}</Project>
+      <Name>GitoliteConfig</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GitoliteConfigFiles\Permissions %28Deny%29\Deny1.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

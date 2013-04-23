@@ -1,4 +1,6 @@
-﻿namespace WebGitNet.Authorization
+﻿using System.Web.Routing;
+
+namespace WebGitNet.Authorization
 {
     using System;
     using System.Security.Principal;
@@ -49,11 +51,21 @@
 		{
             IAuthorizationProvider authorizationProvider = WebGitNetApplication.GetAuthorizationProvider();
 
-		    return authorizationProvider.HasReadPermission(repoInfo.Name, principal.Name);
+		    bool verifyUserPermissions = authorizationProvider.HasReadPermission(repoInfo.Name, principal.Name);
+
+		    return verifyUserPermissions;
 		}
 
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
 		{
+            // Returns HTTP 401 - see comment in HttpUnauthorizedResult.cs.
+            //filterContext.Result = new RedirectToRouteResult(
+            //                           new RouteValueDictionary 
+            //                       {
+            //                           { "action", "Index" },
+            //                           { "controller", "BrowseController" }
+            //                       });
+
 			base.HandleUnauthorizedRequest(filterContext);
 		}
 	}

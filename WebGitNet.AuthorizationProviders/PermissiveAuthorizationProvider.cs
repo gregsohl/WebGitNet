@@ -11,7 +11,7 @@
             return true;
         }
 
-        public bool HasWritePermission(string repositoryName, string name)
+        public bool HasWritePermission(string repositoryName, string userName)
         {
             return true;
         }

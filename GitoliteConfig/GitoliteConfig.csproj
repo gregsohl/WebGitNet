@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{21DA07F7-985D-4E5D-88C7-6C7ABD281AC7}</ProjectGuid>
+    <ProjectGuid>{0053E53F-2E6A-4FA0-9921-2DC05714F239}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WebGitNet.AuthorizationProviders</RootNamespace>
-    <AssemblyName>WebGitNet.AuthorizationProviders</AssemblyName>
+    <RootNamespace>GitoliteConfig</RootNamespace>
+    <AssemblyName>GitoliteConfig</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\WebGitNet\Plugins\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -40,20 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthorizationProviderException.cs" />
-    <Compile Include="PermissiveAuthorizationProvider.cs" />
-    <Compile Include="GitoliteAuthorizationProvider.cs" />
+    <Compile Include="AccessType.cs" />
+    <Compile Include="GitoliteConfig.cs" />
+    <Compile Include="Group.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GitoliteConfig\GitoliteConfig.csproj">
-      <Project>{0053E53F-2E6A-4FA0-9921-2DC05714F239}</Project>
-      <Name>GitoliteConfig</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WebGitNet.SharedLib\WebGitNet.SharedLib.csproj">
-      <Project>{F00879C2-B2F3-4202-B1BF-12A875AF4F7B}</Project>
-      <Name>WebGitNet.SharedLib</Name>
-    </ProjectReference>
+    <Compile Include="Repository.cs" />
+    <Compile Include="RepositoryPermission.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
