@@ -15,13 +15,13 @@
         public bool IsArchived { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the current user has read permission to this repo.
-        /// This is not universally set. Only in conditions where it is intended to be utilized.
+        /// Gets or sets a value indicating whether the item should be displayed text-only or with a link.
+        /// Defaults to true. Set to false in configurations where linking of repos is optional.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the current user has read permission; otherwise, <c>false</c>.
+        /// <c>true</c> if the repository should be displayed with a link; otherwise, <c>false</c>.
         /// </value>
-        public bool HasReadPermission
+        public bool ViewWithLink
         {
             get { return hasReadAccess; }
             set { hasReadAccess = value; }

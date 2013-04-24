@@ -41,3 +41,11 @@ div.image-preview img
     vertical-align: top;
     border: 1px solid white;
 }
+
+.media-body ul li p {
+    margin: 0 0.25em;
+}
+
+.media-body ul ul {
+    margin-bottom: 1em;
+}

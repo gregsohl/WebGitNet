@@ -40,9 +40,10 @@ namespace WebGitNet.Authorization
 					return false;
 				}
 
-                if (httpContext.Request.Url.AbsolutePath.Contains("git-upload-pack"))
+                if ((httpContext.Request.Url.AbsolutePath.Contains("git-upload-pack")) ||
+                    (httpContext.Request.Url.AbsolutePath.Contains("git-receive-pack")))
                 {
-                    return VerifyUserReadPermission(repoInfo, windowsIdentity);
+                    return VerifyUserWritePermission(repoInfo, windowsIdentity);
                 }
 
 				return VerifyUserReadPermission(repoInfo, windowsIdentity);
@@ -75,7 +76,7 @@ namespace WebGitNet.Authorization
             foreach (var repoInfo in repoList)
             {
                 bool hasReadPermission = VerifyUserReadPermission(repoInfo.Name, userName);
-                repoInfo.HasReadPermission = hasReadPermission;
+                repoInfo.ViewWithLink = hasReadPermission;
             }
         }
 

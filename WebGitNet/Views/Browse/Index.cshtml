@@ -18,7 +18,7 @@
     {
         if (repo.IsGitRepo)
         {
-            if (repo.HasReadPermission)
+            if (repo.ViewWithLink)
             {
                 <tr><td style="white-space: nowrap;">@Html.ActionLink(repo.Name, "ViewRepo", new {repo = repo.Name})</td><td>@repo.Description</td></tr>
             }

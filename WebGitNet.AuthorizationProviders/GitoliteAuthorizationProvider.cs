@@ -4,10 +4,15 @@ namespace WebGitNet.AuthorizationProviders
 {
     using System.IO;
 
-    using WebGitNet.Authorization;
+    using Authorization;
 
     public class GitoliteAuthorizationProvider : IAuthorizationProvider
     {
+        public GitoliteAuthorizationProvider()
+        {
+            lastConfigLoad = new DateTime(1970, 1, 1).ToUniversalTime();
+        }
+
         public string ApplicationPath
         {
             get { return applicationPath; }
@@ -17,18 +22,23 @@ namespace WebGitNet.AuthorizationProviders
                 string permissionsFilePath = Path.Combine(applicationPath, "gitolite.conf");
                 if (File.Exists(permissionsFilePath))
                 {
-                    enabled = true;
+                    DateTime lastWriteTime = File.GetLastWriteTime(permissionsFilePath);
+                    if (lastWriteTime.ToUniversalTime() > lastConfigLoad)
+                    {
+                        enabled = true;
 
-                    permissionsConfig = new GitoliteConfig();
-                    try
-                    {
-                        permissionsConfig.Load(permissionsFilePath);
-                    }
-                    catch (Exception exception)
-                    {
-                        enabled = false;
-                        throw new AuthorizationProviderException(
-                            "Failed to initialize GitoliteAuthorizationProvider", exception);
+                        permissionsConfig = new GitoliteConfig();
+                        try
+                        {
+                            permissionsConfig.Load(permissionsFilePath);
+                            lastConfigLoad = DateTime.UtcNow;
+                        }
+                        catch (Exception exception)
+                        {
+                            enabled = false;
+                            throw new AuthorizationProviderException(
+                                "Failed to initialize GitoliteAuthorizationProvider", exception);
+                        }
                     }
                 }
             }
@@ -57,5 +67,6 @@ namespace WebGitNet.AuthorizationProviders
         private string applicationPath;
         private bool enabled;
         private GitoliteConfig permissionsConfig;
+        private DateTime lastConfigLoad;
     }
 }
