@@ -88,12 +88,14 @@ namespace WebGitNet.Controllers
                     new { controller = "File", action = "GetInfoRefs" },
                     new { url = @"(.*?)/info/refs" });
 
+                // UploadPack for transferring data to the client (http://git-scm.com/book/en/Git-Internals-Transfer-Protocols)
                 routes.MapRoute(
                     "Post */git-upload-pack",
                     "git/{*url}",
                     new { controller = "ServiceRpc", action = "UploadPack" },
                     new { url = @"(.*?)/git-upload-pack" });
 
+                // ReceivePack for recieving data from the client (http://git-scm.com/book/en/Git-Internals-Transfer-Protocols)
                 routes.MapRoute(
                     "Post */git-receive-pack",
                     "git/{*url}",

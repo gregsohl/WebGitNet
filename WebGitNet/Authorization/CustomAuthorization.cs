@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Web.Routing;
+﻿
+using System.Diagnostics;
 
 namespace WebGitNet.Authorization
 {
     using System;
+    using System.Collections.Generic;
     using System.Security.Principal;
     using System.Web;
     using System.Web.Configuration;
@@ -11,12 +12,14 @@ namespace WebGitNet.Authorization
 
 	public class CustomAuthorization : AuthorizeAttribute
 	{
-		public override void OnAuthorization(AuthorizationContext filterContext)
-		{
-			base.OnAuthorization(filterContext);
-		}
+        public override void OnAuthorization(AuthorizationContext filterContext)
+        {
+            Debug.WriteLine(filterContext.ActionDescriptor.ActionName);
 
-		protected override bool AuthorizeCore(HttpContextBase httpContext)
+            base.OnAuthorization(filterContext);
+        }
+
+	    protected override bool AuthorizeCore(HttpContextBase httpContext)
 		{
 			if (!httpContext.User.Identity.IsAuthenticated)
 			{
@@ -31,6 +34,12 @@ namespace WebGitNet.Authorization
 			string[] pathDirectories = path.Split(new[]{'/'}, StringSplitOptions.RemoveEmptyEntries);
 			if (pathDirectories.Length >= 2)
 			{
+			    if ((pathDirectories[0] == "Scripts") ||
+			        (pathDirectories[0] == "Content"))
+			    {
+			        return true;
+			    }
+
 				var resourceInfo = fileManager.GetResourceInfo(pathDirectories[1]);
 				var repoInfo = GitUtilities.GetRepoInfo(resourceInfo.FullPath);
 
@@ -40,15 +49,29 @@ namespace WebGitNet.Authorization
 					return false;
 				}
 
-                if ((httpContext.Request.Url.AbsolutePath.Contains("git-upload-pack")) ||
-                    (httpContext.Request.Url.AbsolutePath.Contains("git-receive-pack")))
+                // Check for Write permission needed on a Push request
+			    bool hasRequestedPermission;
+			    if (httpContext.Request.Url.AbsolutePath.Contains("git-receive-pack"))
                 {
-                    return VerifyUserWritePermission(repoInfo, windowsIdentity);
+                    hasRequestedPermission = VerifyUserWritePermission(repoInfo, windowsIdentity);
                 }
+			    else
+			    {
+                    hasRequestedPermission = VerifyUserReadPermission(repoInfo, windowsIdentity);
+			    }
 
-				return VerifyUserReadPermission(repoInfo, windowsIdentity);
+			    if (!hasRequestedPermission)
+			    {
+			        httpContext.Response.StatusCode = 403;
+			        httpContext.Response.ContentType = "text/plain";
+			        httpContext.Response.Write("Forbidden");
+			    }
+
+			    return hasRequestedPermission;
+
 			}
 
+            // Not a url that we need to do specific authorization on. Fall through to the base.
 			return base.AuthorizeCore(httpContext);
 		}
 
@@ -98,11 +121,5 @@ namespace WebGitNet.Authorization
 
             return verifyUserPermissions;
         }
-
-
-		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
-		{
-			base.HandleUnauthorizedRequest(filterContext);
-		}
 	}
 }
