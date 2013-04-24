@@ -52,7 +52,8 @@ namespace WebGitNet.Authorization
                 bool hasRequestedPermission;
 
                 // Check for Write permission needed on a Push request
-			    if (httpContext.Request.Url.AbsolutePath.Contains("git-receive-pack"))
+			    if ((httpContext.Request.Url.AbsolutePath.Contains("git-receive-pack")) ||
+                    (pathDirectories[0] == "manage"))
                 {
                     hasRequestedPermission = VerifyUserWritePermission(repoInfo, windowsIdentity);
                 }
