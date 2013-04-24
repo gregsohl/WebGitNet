@@ -5,7 +5,6 @@
 // <author>John Gietzen</author>
 //-----------------------------------------------------------------------
 
-using System.Collections.Generic;
 using System.Security.Principal;
 using System.Web.Configuration;
 

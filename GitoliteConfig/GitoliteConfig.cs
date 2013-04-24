@@ -51,6 +51,7 @@
 			Group group;
 			if (TryGetGroup(groupName, out group))
 			{
+			    name = name.ToLower();
 				if (group.Members.Contains(name))
 				{
 					return true;
@@ -247,12 +248,12 @@
 			// Strip the @
 			groupName = groupName.Substring(1);
 
-			Group @group;
+			Group permissionGroup;
 			bool isNew = false;
 
-			if (!m_Groups.TryGetValue(groupName, out @group))
+			if (!m_Groups.TryGetValue(groupName, out permissionGroup))
 			{
-				@group = new Group(groupName);
+				permissionGroup = new Group(groupName);
 				isNew = true;
 			}
 
@@ -261,12 +262,12 @@
 			foreach (string groupMember in groupMembers)
 			{
 				List<string> expandedList = ExpandList(groupMember);
-				@group.AddMembers(expandedList);
+				permissionGroup.AddMembers(expandedList);
 			}
 
 			if (isNew)
 			{
-				m_Groups.Add(groupName, @group);
+				m_Groups.Add(groupName, permissionGroup);
 			}
 		}
 

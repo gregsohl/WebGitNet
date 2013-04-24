@@ -30,6 +30,12 @@ namespace WebGitNet.Authorization
 			var reposPath = WebConfigurationManager.AppSettings["RepositoriesPath"];
 			FileManager fileManager = new FileManager(reposPath);
 
+            WindowsIdentity windowsIdentity = httpContext.User.Identity as WindowsIdentity;
+            if (windowsIdentity == null)
+            {
+                return false;
+            }
+
 			string path = httpContext.Request.Url.LocalPath;
 			string[] pathDirectories = path.Split(new[]{'/'}, StringSplitOptions.RemoveEmptyEntries);
 			if (pathDirectories.Length >= 2)
@@ -40,17 +46,12 @@ namespace WebGitNet.Authorization
 			        return true;
 			    }
 
-				var resourceInfo = fileManager.GetResourceInfo(pathDirectories[1]);
+			    var resourceInfo = fileManager.GetResourceInfo(pathDirectories[1]);
 				var repoInfo = GitUtilities.GetRepoInfo(resourceInfo.FullPath);
 
-				WindowsIdentity windowsIdentity = httpContext.User.Identity as WindowsIdentity;
-				if (windowsIdentity == null)
-				{
-					return false;
-				}
+                bool hasRequestedPermission;
 
                 // Check for Write permission needed on a Push request
-			    bool hasRequestedPermission;
 			    if (httpContext.Request.Url.AbsolutePath.Contains("git-receive-pack"))
                 {
                     hasRequestedPermission = VerifyUserWritePermission(repoInfo, windowsIdentity);
@@ -62,18 +63,36 @@ namespace WebGitNet.Authorization
 
 			    if (!hasRequestedPermission)
 			    {
-			        httpContext.Response.StatusCode = 403;
-			        httpContext.Response.ContentType = "text/plain";
-			        httpContext.Response.Write("Forbidden");
+			        SetForbidden(httpContext);
 			    }
 
 			    return hasRequestedPermission;
 
 			}
 
+            if (pathDirectories[0].ToLower() == "create")
+            {
+                bool hasRequestedPermission = VerifyUserCreatePermission(windowsIdentity);
+
+                if (!hasRequestedPermission)
+                {
+                    SetForbidden(httpContext);
+                }
+                
+                return hasRequestedPermission;
+            }
+
+
             // Not a url that we need to do specific authorization on. Fall through to the base.
 			return base.AuthorizeCore(httpContext);
 		}
+
+	    private static void SetForbidden(HttpContextBase httpContext)
+	    {
+	        httpContext.Response.StatusCode = 403;
+	        httpContext.Response.ContentType = "text/plain";
+	        httpContext.Response.Write("You do not have access to this repository or function.");
+	    }
 
 	    public static bool VerifyUserReadPermission(RepoInfo repoInfo, WindowsIdentity principal)
 		{
@@ -118,6 +137,17 @@ namespace WebGitNet.Authorization
             IAuthorizationProvider authorizationProvider = WebGitNetApplication.GetAuthorizationProvider();
 
             bool verifyUserPermissions = authorizationProvider.HasWritePermission(repoName, userName);
+
+            return verifyUserPermissions;
+        }
+
+	    public static bool VerifyUserCreatePermission(WindowsIdentity principal)
+        {
+            string userName = principal.Name;
+
+            IAuthorizationProvider authorizationProvider = WebGitNetApplication.GetAuthorizationProvider();
+
+            bool verifyUserPermissions = authorizationProvider.HasCreatePermission(userName);
 
             return verifyUserPermissions;
         }

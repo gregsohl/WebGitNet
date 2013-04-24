@@ -64,6 +64,13 @@ namespace WebGitNet.AuthorizationProviders
             return hasWritePermission;
         }
 
+        public bool HasCreatePermission(string userName)
+        {
+            bool hasCreatePermission = permissionsConfig.IsGroupMember("creators", userName);
+
+            return hasCreatePermission;
+        }
+
         private string applicationPath;
         private bool enabled;
         private GitoliteConfig permissionsConfig;

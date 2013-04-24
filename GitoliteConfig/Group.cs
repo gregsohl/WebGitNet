@@ -34,7 +34,10 @@ namespace WebGitNet.Authorization
 
 		public void AddMembers(List<string> expandedList)
 		{
-			m_Members.AddRange(expandedList);
+		    foreach (var groupMember in expandedList)
+		    {
+                m_Members.Add(groupMember.ToLower());
+		    }
 		}
 
 		#region Equality

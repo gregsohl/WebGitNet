@@ -15,5 +15,10 @@
         {
             return true;
         }
+
+        public bool HasCreatePermission(string userName)
+        {
+            return true;
+        }
     }
 }
