@@ -41,26 +41,33 @@
             </div>
         </div>
         <div class="container">
-            @if (breadcrumbs != null)
-            {
-                <ul class="breadcrumb">
-                @{
-                    var breadcrumbList = breadcrumbs.ToList();
-                    for (var i = 0; i < breadcrumbList.Count; i++)
-                    {
-                        var last = i == breadcrumbList.Count - 1;
-                        var breadcrumb = breadcrumbList[i];
-                        <li @Html.Raw(last ? " class=\"active\"" : "")>
-                            @Html.ActionLink(breadcrumb.Name, breadcrumb.Action, breadcrumb.Controller, breadcrumb.RouteValues, null)
-                            @if (!last)
+            <div class="pull-left">
+                @if (breadcrumbs != null)
+                {
+                    <ul class="breadcrumb">
+                        @{
+                            var breadcrumbList = breadcrumbs.ToList();
+                            for (var i = 0; i < breadcrumbList.Count; i++)
                             {
-                                <span class="divider">/</span>
+                                var last = i == breadcrumbList.Count - 1;
+                                var breadcrumb = breadcrumbList[i];
+                                <li @Html.Raw(last ? " class=\"active\"" : "")>
+                                    @Html.ActionLink(breadcrumb.Name, breadcrumb.Action, breadcrumb.Controller, breadcrumb.RouteValues, null)
+                                    @if (!last)
+                                    {
+                                        <span class="divider">/</span>
+                                    }
+                                </li>
                             }
-                        </li>
-                    }
+                        }
+                    </ul>
                 }
+            </div>
+            <div class="pull-right">
+                <ul class="breadcrumb">
+                    <li>User: @Context.User.Identity.Name</li>
                 </ul>
-            }
+            </div>
         </div>
     </div>
 
