@@ -27,6 +27,12 @@ namespace WebGitNet
     {
         private static IWindsorContainer container;
 
+        private static string[] supportedAuthorizationProviders =
+        {
+            "Permissive",
+            "Gitolite"
+        };
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -72,18 +78,38 @@ namespace WebGitNet
 
         private static void Bootstrap()
         {
+            var authorizationProviderName = DetermineAuthorizationProvider();
+
             var directoryFilter = new AssemblyFilter(HostingEnvironment.MapPath("~/Plugins"));
 
             container = new WindsorContainer()
-                        .Install(new AssemblyInstaller())
+                        .Install(new AssemblyInstaller(authorizationProviderName))
                         .Install(FromAssembly.InDirectory(directoryFilter));
 
             var controllerFactory = new WindsorControllerFactory(container.Kernel);
             ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }
 
+        private static string DetermineAuthorizationProvider()
+        {
+            string authorizationProviderName = WebConfigurationManager.AppSettings["AuthorizationProvider"];
+            if (!supportedAuthorizationProviders.Contains(authorizationProviderName))
+            {
+                authorizationProviderName = "Permissive";
+            }
+            authorizationProviderName = string.Format("{0}{1}", authorizationProviderName, "AuthorizationProvider");
+            return authorizationProviderName;
+        }
+
         private class AssemblyInstaller : IWindsorInstaller
         {
+            private string authorizationProviderName;
+
+            public AssemblyInstaller(string authorizationProviderName)
+            {
+                this.authorizationProviderName = authorizationProviderName;
+            }
+
             public void Install(IWindsorContainer container, IConfigurationStore configurationStore)
             {
                 var directoryFilter = new AssemblyFilter(HostingEnvironment.MapPath("~/Plugins"));
@@ -106,13 +132,11 @@ namespace WebGitNet
                                            .If(SelectAuthorizationProvider)
                                            .WithService.FromInterface()
                                            .LifestyleSingleton());
+
             }
 
             private bool SelectAuthorizationProvider(Type type)
             {
-                string authorizationProviderName = WebConfigurationManager.AppSettings["AuthorizationProvider"];
-                authorizationProviderName = string.Format("{0}{1}", authorizationProviderName, "AuthorizationProvider");
-
                 if (type.Name == authorizationProviderName)
                     return true;
 

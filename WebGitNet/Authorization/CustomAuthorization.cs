@@ -1,10 +1,8 @@
-﻿
-using System.Diagnostics;
-
-namespace WebGitNet.Authorization
+﻿namespace WebGitNet.Authorization
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Security.Principal;
     using System.Web;
     using System.Web.Configuration;
@@ -14,7 +12,7 @@ namespace WebGitNet.Authorization
 	{
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            Debug.WriteLine(filterContext.ActionDescriptor.ActionName);
+            // Debug.WriteLine(filterContext.ActionDescriptor.ActionName);
 
             base.OnAuthorization(filterContext);
         }
