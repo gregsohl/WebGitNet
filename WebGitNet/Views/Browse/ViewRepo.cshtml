@@ -88,11 +88,12 @@
         @if (branches.Any())
         {
             <div class="btn-group">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-branch"></i> Branches <span class="caret"></span></a>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-branch"></i> @(@ViewBag.Object != null ? @ViewBag.Object : "Branches") <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     @foreach (var branch in branches)
                     {
-                        <li><a href="@Url.Action("ViewCommits", new { repo = repoName, @object = branch.Name })"><i class="icon-branch"></i> @branch.Name</a></li>
+                        <li><a href="@Url.Action("ViewRepo", new { repo = repoName, @object = branch.Name })"><i class="icon-branch"></i> @branch.Name</a></li>
+                        <!--<li><a href="@Url.Action("ViewCommits", new { repo = repoName, @object = branch.Name })"><i class="icon-branch"></i> @branch.Name</a></li>-->
                     }
                 </ul>
             </div>

@@ -33,7 +33,7 @@ namespace WebGitNet.Controllers
             return View(repos);
         }
 
-        public ActionResult ViewRepo(string repo)
+        public ActionResult ViewRepo(string repo, string @object = null)
         {
             var resourceInfo = this.FileManager.GetResourceInfo(repo);
             if (resourceInfo.Type != ResourceType.Directory)
@@ -49,11 +49,12 @@ namespace WebGitNet.Controllers
 
             AddRepoBreadCrumb(repo);
 
-            var lastCommit = GitUtilities.GetLogEntries(resourceInfo.FullPath, 1).FirstOrDefault();
+            var lastCommit = GitUtilities.GetLogEntries(resourceInfo.FullPath, 1, 0, @object).FirstOrDefault();
 
             ViewBag.RepoInfo = GitUtilities.GetRepoInfo(resourceInfo.FullPath);
             ViewBag.LastCommit = lastCommit;
-            ViewBag.CurrentTree = lastCommit != null ? GitUtilities.GetTreeInfo(resourceInfo.FullPath, "HEAD") : null;
+            ViewBag.CurrentTree = lastCommit != null ? GitUtilities.GetTreeInfo(resourceInfo.FullPath, @object) : null;
+            ViewBag.Object = @object ?? "HEAD";
             ViewBag.Refs = GitUtilities.GetAllRefs(resourceInfo.FullPath);
 
             return View();
@@ -220,8 +221,8 @@ namespace WebGitNet.Controllers
 
                 routes.MapRoute(
                     "View Repo",
-                    "browse/{repo}",
-                    new { controller = "Browse", action = "ViewRepo" });
+                    "browse/{repo}/{object}",
+                    new { controller = "Browse", action = "ViewRepo", @object = UrlParameter.Optional });
 
                 routes.MapRoute(
                     "View Tree",
